@@ -12,105 +12,109 @@ function App() {
   const [position, setPosition] = useState(null);
 
   useEffect(() => {
-    const calculatePosition = () => {
-      if (!oRef.current || !targetRef.current) {
-        return;
-      }
-
-      // Moving cookie size
-      const cookieSize = 90;
-
-      // =========================
-      // O POSITION
-      // =========================
+    const updatePosition = () => {
+      if (!oRef.current || !targetRef.current) return;
 
       const o = oRef.current.getBoundingClientRect();
+      const target = targetRef.current.getBoundingClientRect();
 
-      const startX =
-        o.left +
-        o.width / 2 -
-        cookieSize / 2;
-
-      const startY =
-        o.top +
-        o.height / 2 -
-        cookieSize / 2 +
-        window.scrollY;
-
-      // =========================
-      // EXACT CARD 2 CIRCLE
-      // =========================
-
-      const target =
-        targetRef.current.getBoundingClientRect();
-
-      const targetX =
-        target.left +
-        target.width / 2 -
-        cookieSize / 2;
-
-      const targetY =
-        target.top +
-        target.height / 2 -
-        cookieSize / 2 +
-        window.scrollY;
+      const cookieSize = 90;
 
       setPosition({
-        startX,
-        startY,
-        targetX,
-        targetY,
+        startX:
+          o.left +
+          o.width / 2 -
+          cookieSize / 2,
+
+        startY:
+          o.top +
+          o.height / 2 -
+          cookieSize / 2,
+
+        targetX:
+          target.left +
+          target.width / 2 -
+          cookieSize / 2,
+
+        targetY:
+          target.top +
+          target.height / 2 -
+          cookieSize / 2,
       });
     };
 
-    const timer = setTimeout(
-      calculatePosition,
-      500
-    );
+    updatePosition();
 
-    window.addEventListener(
-      "resize",
-      calculatePosition
-    );
+    const timer = setTimeout(updatePosition, 1000);
+
+    window.addEventListener("resize", updatePosition);
 
     return () => {
       clearTimeout(timer);
-
       window.removeEventListener(
         "resize",
-        calculatePosition
+        updatePosition
       );
     };
   }, []);
 
+  const cookieImage =
+    `${import.meta.env.BASE_URL}images/cookie.png`;
+
   return (
-    <main className="page">
+    <>
+      <main className="page">
 
-      {/* HERO */}
+        <Hero oRef={oRef} />
 
-      <Hero oRef={oRef} />
+        <section className="cards-section">
 
-      {/* MOVING COOKIE */}
+          <ProductCard
+            number="01"
+            name="Classic"
+            description="Buttery & crunchy"
+            price="₹199"
+          />
+
+          <ProductCard
+            number="02"
+            name="Chocolate"
+            description="Rich & indulgent"
+            price="₹299"
+            center={true}
+            targetRef={targetRef}
+          />
+
+          <ProductCard
+            number="03"
+            name="Hazelnut"
+            description="Nutty & delicious"
+            price="₹399"
+          />
+
+        </section>
+
+      </main>
 
       {position && (
         <motion.img
-          src="/images/cookie.png"
+          src={cookieImage}
           alt="Moving cookie"
           className="scroll-cookie"
 
           initial={{
-            x: position.startX,
-            y: position.startY,
+            left: position.startX,
+            top: position.startY,
           }}
 
           animate={{
-            x: [
+            left: [
               position.startX,
               position.targetX,
               position.startX,
             ],
 
-            y: [
+            top: [
               position.startY,
               position.targetY,
               position.startY,
@@ -119,52 +123,15 @@ function App() {
 
           transition={{
             duration: 8,
-
-            times: [
-              0,
-              0.5,
-              1,
-            ],
-
+            times: [0, 0.5, 1],
             ease: "easeInOut",
-
             repeat: Infinity,
-
             repeatDelay: 1,
           }}
         />
       )}
 
-      {/* PRODUCT CARDS */}
-
-      <section className="cards-section">
-
-        <ProductCard
-          number="01"
-          name="Classic"
-          description="Buttery & crunchy"
-          price="₹199"
-        />
-
-        <ProductCard
-          number="02"
-          name="Chocolate"
-          description="Rich & indulgent"
-          price="₹299"
-          center
-          targetRef={targetRef}
-        />
-
-        <ProductCard
-          number="03"
-          name="Hazelnut"
-          description="Nutty & delicious"
-          price="₹399"
-        />
-
-      </section>
-
-    </main>
+    </>
   );
 }
 

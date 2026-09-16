@@ -6,10 +6,9 @@ function Hero({ oRef }) {
       <div className="cookie-title">
         <span>C</span>
 
-        {/* Cookie starts here */}
         <div
-          className="cookie-o"
           ref={oRef}
+          className="cookie-o"
         ></div>
 
         <span>OKIE</span>

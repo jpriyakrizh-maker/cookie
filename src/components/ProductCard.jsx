@@ -6,25 +6,27 @@ function ProductCard({
   center = false,
   targetRef,
 }) {
+  const cookieImage =
+    `${import.meta.env.BASE_URL}images/cookie.png`;
+
   return (
-    <article
-      className={`card ${center ? "center-card" : ""}`}
-    >
+    <article className={`card ${center ? "center-card" : ""}`}>
+
       <div className="card-number">
         {number}
       </div>
 
       {center ? (
-        <div
-          ref={targetRef}
-          className="card-cookie-space"
-        >
-          <div className="cookie-target-ring"></div>
+        <div className="card-cookie-space">
+          <div
+            ref={targetRef}
+            className="cookie-target-ring"
+          ></div>
         </div>
       ) : (
         <div className="card-cookie-image">
           <img
-            src="/images/cookie.png"
+            src={cookieImage}
             alt={`${name} cookie`}
           />
         </div>
@@ -38,11 +40,10 @@ function ProductCard({
         <div className="price-row">
           <strong>{price}</strong>
 
-          <button type="button">
-            +
-          </button>
+          <button type="button">+</button>
         </div>
       </div>
+
     </article>
   );
 }
