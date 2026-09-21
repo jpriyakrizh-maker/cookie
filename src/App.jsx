@@ -1,16 +1,25 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 import "./App.css";
 
 import Hero from "./components/Hero";
 import ProductCard from "./components/ProductCard";
 
+gsap.registerPlugin(ScrollTrigger);
+
 function App() {
   const oRef = useRef(null);
   const targetRef = useRef(null);
+  const pageRef = useRef(null);
 
   const [position, setPosition] = useState(null);
 
+  // --------------------------------
+  // Existing cookie position logic
+  // --------------------------------
   useEffect(() => {
     const updatePosition = () => {
       if (!oRef.current || !targetRef.current) return;
@@ -51,50 +60,120 @@ function App() {
 
     return () => {
       clearTimeout(timer);
-      window.removeEventListener(
-        "resize",
-        updatePosition
-      );
+      window.removeEventListener("resize", updatePosition);
     };
+  }, []);
+
+  // --------------------------------
+  // GSAP ScrollTrigger
+  // --------------------------------
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+
+      // Hero animation
+      gsap.from(".hero-content", {
+        y: 100,
+        opacity: 0,
+        duration: 1.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".hero-content",
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
+      });
+
+      // Cards animation
+      gsap.from(".product-card", {
+        y: 120,
+        opacity: 0,
+        scale: 0.85,
+        stagger: 0.2,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".cards-section",
+          start: "top 80%",
+          end: "top 30%",
+          scrub: 1,
+        },
+      });
+
+      // Chocolate card special animation
+      gsap.to(".product-card:nth-child(2)", {
+        y: -40,
+        rotate: 2,
+        scrollTrigger: {
+          trigger: ".cards-section",
+          start: "top 70%",
+          end: "bottom 30%",
+          scrub: 1.5,
+        },
+      });
+
+      // Cards section movement
+      gsap.to(".cards-section", {
+        y: -60,
+        scrollTrigger: {
+          trigger: ".cards-section",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 2,
+        },
+      });
+
+      // Cookie scroll rotation
+      gsap.to(".scroll-cookie", {
+        rotation: 360,
+        scale: 1.15,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".cards-section",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1,
+        },
+      });
+
+    }, pageRef);
+
+    return () => ctx.revert();
   }, []);
 
   const cookieImage =
     `${import.meta.env.BASE_URL}images/cookie.png`;
 
   return (
-    <>
-      <main className="page">
+    <main ref={pageRef} className="page">
 
-        <Hero oRef={oRef} />
+      <Hero oRef={oRef} />
 
-        <section className="cards-section">
+      <section className="cards-section">
 
-          <ProductCard
-            number="01"
-            name="Classic"
-            description="Buttery & crunchy"
-            price="₹199"
-          />
+        <ProductCard
+          number="01"
+          name="Classic"
+          description="Buttery & crunchy"
+          price="₹199"
+        />
 
-          <ProductCard
-            number="02"
-            name="Chocolate"
-            description="Rich & indulgent"
-            price="₹299"
-            center={true}
-            targetRef={targetRef}
-          />
+        <ProductCard
+          number="02"
+          name="Chocolate"
+          description="Rich & indulgent"
+          price="₹299"
+          center={true}
+          targetRef={targetRef}
+        />
 
-          <ProductCard
-            number="03"
-            name="Hazelnut"
-            description="Nutty & delicious"
-            price="₹399"
-          />
+        <ProductCard
+          number="03"
+          name="Hazelnut"
+          description="Nutty & delicious"
+          price="₹399"
+        />
 
-        </section>
-
-      </main>
+      </section>
 
       {position && (
         <motion.img
@@ -131,7 +210,7 @@ function App() {
         />
       )}
 
-    </>
+    </main>
   );
 }
 
