@@ -1,5 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -15,67 +14,31 @@ function App() {
   const targetRef = useRef(null);
   const pageRef = useRef(null);
 
-  const [position, setPosition] = useState(null);
+  const cookieImage =
+    `${import.meta.env.BASE_URL}images/cookie.png`;
 
-  // --------------------------------
-  // Existing cookie position logic
-  // --------------------------------
-  useEffect(() => {
-    const updatePosition = () => {
-      if (!oRef.current || !targetRef.current) return;
-
-      const o = oRef.current.getBoundingClientRect();
-      const target = targetRef.current.getBoundingClientRect();
-
-      const cookieSize = 90;
-
-      setPosition({
-        startX:
-          o.left +
-          o.width / 2 -
-          cookieSize / 2,
-
-        startY:
-          o.top +
-          o.height / 2 -
-          cookieSize / 2,
-
-        targetX:
-          target.left +
-          target.width / 2 -
-          cookieSize / 2,
-
-        targetY:
-          target.top +
-          target.height / 2 -
-          cookieSize / 2,
-      });
-    };
-
-    updatePosition();
-
-    const timer = setTimeout(updatePosition, 1000);
-
-    window.addEventListener("resize", updatePosition);
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("resize", updatePosition);
-    };
-  }, []);
-
-  // --------------------------------
-  // GSAP ScrollTrigger
-  // --------------------------------
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
+      const cookie = document.querySelector(".scroll-cookie");
+      const parallel = document.querySelector(".cookie-parallel");
 
-      // Hero animation
+      if (!cookie || !parallel || !oRef.current || !targetRef.current) {
+        return;
+      }
+
+      const COOKIE_SIZE = 90;
+      const RING_SIZE = 140;
+
+      /* =================================
+         HERO ANIMATION
+      ================================= */
+
       gsap.from(".hero-content", {
         y: 100,
         opacity: 0,
         duration: 1.2,
         ease: "power3.out",
+
         scrollTrigger: {
           trigger: ".hero-content",
           start: "top 85%",
@@ -83,7 +46,10 @@ function App() {
         },
       });
 
-      // Cards animation
+      /* =================================
+         CARDS ANIMATION
+      ================================= */
+
       gsap.from(".product-card", {
         y: 120,
         opacity: 0,
@@ -91,6 +57,7 @@ function App() {
         stagger: 0.2,
         duration: 1,
         ease: "power3.out",
+
         scrollTrigger: {
           trigger: ".cards-section",
           start: "top 80%",
@@ -99,10 +66,14 @@ function App() {
         },
       });
 
-      // Chocolate card special animation
+      /* =================================
+         CARD 2
+      ================================= */
+
       gsap.to(".product-card:nth-child(2)", {
         y: -40,
         rotate: 2,
+
         scrollTrigger: {
           trigger: ".cards-section",
           start: "top 70%",
@@ -111,9 +82,13 @@ function App() {
         },
       });
 
-      // Cards section movement
+      /* =================================
+         CARDS SECTION
+      ================================= */
+
       gsap.to(".cards-section", {
         y: -60,
+
         scrollTrigger: {
           trigger: ".cards-section",
           start: "top bottom",
@@ -122,26 +97,126 @@ function App() {
         },
       });
 
-      // Cookie scroll rotation
-      gsap.to(".scroll-cookie", {
-        rotation: 360,
-        scale: 1.15,
-        ease: "none",
+      /* =================================
+         GET DOCUMENT POSITION
+      ================================= */
+
+      const getPosition = (element) => {
+        const rect = element.getBoundingClientRect();
+
+        return {
+          x:
+            rect.left +
+            window.scrollX +
+            rect.width / 2 -
+            COOKIE_SIZE / 2,
+
+          y:
+            rect.top +
+            window.scrollY +
+            rect.height / 2 -
+            COOKIE_SIZE / 2,
+        };
+      };
+
+      /* =================================
+         HERO START
+      ================================= */
+
+      const heroPosition = getPosition(oRef.current);
+
+      /* =================================
+         INITIAL COOKIE
+      ================================= */
+
+      gsap.set(cookie, {
+        position: "absolute",
+
+        left: heroPosition.x,
+        top: heroPosition.y,
+
+        rotation: 0,
+        scale: 1,
+      });
+
+      gsap.set(parallel, {
+        position: "absolute",
+
+        left: heroPosition.x - 25,
+        top: heroPosition.y - 25,
+
+        rotation: 0,
+        scale: 0.7,
+        opacity: 0.25,
+      });
+
+      /* =================================
+         COOKIE → CARD 2
+      ================================= */
+
+      const cookieAnimation = gsap.timeline({
         scrollTrigger: {
           trigger: ".cards-section",
-          start: "top bottom",
-          end: "bottom top",
+
+          start: "top 85%",
+          end: "top 25%",
+
           scrub: 1,
+
+          invalidateOnRefresh: true,
         },
       });
+
+      cookieAnimation.to(
+        cookie,
+        {
+          left: () => getPosition(targetRef.current).x,
+          top: () => getPosition(targetRef.current).y,
+
+          rotation: 360,
+          scale: 0.9,
+
+          ease: "none",
+        }
+      );
+
+      /* =================================
+         PARALLEL RING
+      ================================= */
+
+      const ringAnimation = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".cards-section",
+
+          start: "top 85%",
+          end: "top 25%",
+
+          scrub: 1,
+
+          invalidateOnRefresh: true,
+        },
+      });
+
+      ringAnimation.to(
+        parallel,
+        {
+          left: () => getPosition(targetRef.current).x - 25,
+          top: () => getPosition(targetRef.current).y - 25,
+
+          rotation: 360,
+          scale: 1.25,
+          opacity: 0.9,
+
+          ease: "none",
+        }
+      );
+
+      ScrollTrigger.refresh();
 
     }, pageRef);
 
     return () => ctx.revert();
   }, []);
-
-  const cookieImage =
-    `${import.meta.env.BASE_URL}images/cookie.png`;
 
   return (
     <main ref={pageRef} className="page">
@@ -175,40 +250,13 @@ function App() {
 
       </section>
 
-      {position && (
-        <motion.img
-          src={cookieImage}
-          alt="Moving cookie"
-          className="scroll-cookie"
+      <div className="cookie-parallel"></div>
 
-          initial={{
-            left: position.startX,
-            top: position.startY,
-          }}
-
-          animate={{
-            left: [
-              position.startX,
-              position.targetX,
-              position.startX,
-            ],
-
-            top: [
-              position.startY,
-              position.targetY,
-              position.startY,
-            ],
-          }}
-
-          transition={{
-            duration: 8,
-            times: [0, 0.5, 1],
-            ease: "easeInOut",
-            repeat: Infinity,
-            repeatDelay: 1,
-          }}
-        />
-      )}
+      <img
+        src={cookieImage}
+        alt="Moving cookie"
+        className="scroll-cookie"
+      />
 
     </main>
   );

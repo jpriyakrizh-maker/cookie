@@ -2,53 +2,109 @@ import { motion } from "framer-motion";
 
 function CookieScroll() {
   return (
-    <motion.img
-      src="/images/cookie.png"
-      alt="Cookie"
-      className="moving-cookie"
+    <>
+      {/* PARALLEL GLOW OBJECT */}
+      <motion.div
+        className="cookie-parallel-effect"
+        animate={{
+          y: [
+            0,
+            30,
+            330,
+            330,
+            0,
+          ],
 
-      animate={{
-        y: [
-          0,     // Hero O
-          30,    // slight movement
-          330,   // center card
-          330,   // stop on card
-          0,     // return to Hero
-        ],
+          scale: [
+            0.8,
+            0.9,
+            1.2,
+            1.2,
+            0.8,
+          ],
 
-        rotate: [
-          0,
-          -8,
-          180,
-          220,
-          360,
-        ],
+          opacity: [
+            0.3,
+            0.5,
+            0.8,
+            0.8,
+            0.3,
+          ],
 
-        scale: [
-          1,
-          1,
-          0.9,
-          0.9,
-          1,
-        ],
-      }}
+          rotate: [
+            0,
+            -8,
+            180,
+            220,
+            360,
+          ],
+        }}
+        transition={{
+          duration: 9,
 
-      transition={{
-        duration: 9,
+          times: [
+            0,
+            0.15,
+            0.55,
+            0.70,
+            1,
+          ],
 
-        times: [
-          0,
-          0.15,
-          0.55,
-          0.70,
-          1,
-        ],
+          repeat: Infinity,
 
-        repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
 
-        ease: "easeInOut",
-      }}
-    />
+      {/* MAIN COOKIE */}
+      <motion.img
+        src="/images/cookie.png"
+        alt="Cookie"
+        className="scroll-cookie"
+
+        animate={{
+          y: [
+            0,
+            30,
+            330,
+            330,
+            0,
+          ],
+
+          rotate: [
+            0,
+            -8,
+            180,
+            220,
+            360,
+          ],
+
+          scale: [
+            1,
+            1,
+            0.9,
+            0.9,
+            1,
+          ],
+        }}
+
+        transition={{
+          duration: 9,
+
+          times: [
+            0,
+            0.15,
+            0.55,
+            0.70,
+            1,
+          ],
+
+          repeat: Infinity,
+
+          ease: "easeInOut",
+        }}
+      />
+    </>
   );
 }
 

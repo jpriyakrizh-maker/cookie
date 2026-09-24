@@ -10,8 +10,7 @@ function ProductCard({
     `${import.meta.env.BASE_URL}images/cookie.png`;
 
   return (
-    <article className={`card ${center ? "center-card" : ""}`}>
-
+<article className={`card product-card ${center ? "center-card" : ""}`}>
       <div className="card-number">
         {number}
       </div>

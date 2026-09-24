@@ -14,7 +14,7 @@ function Hero({ oRef }) {
         <span>OKIE</span>
       </div>
 
-      <div className="content">
+      <div className="hero-content">
         <small>COOKIE NO. 01</small>
 
         <h2>

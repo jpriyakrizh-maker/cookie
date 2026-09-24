@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap");
 
+/* =================================
+   RESET
+================================= */
+
 * {
   margin: 0;
   padding: 0;
@@ -34,40 +38,52 @@ body {
     );
 
   color: #f7e7d0;
+
   overflow-x: hidden;
 }
+
 /* =================================
    PAGE
 ================================= */
+
 .page {
   position: relative;
   width: 100%;
   min-height: 100vh;
+
   overflow: visible;
+
   margin: 0;
   padding: 0;
 }
+
 /* =================================
    HERO
 ================================= */
 
 .hero {
   position: relative;
+
   width: 100%;
   min-height: 560px;
+
   margin: 0;
   padding: 40px 7%;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   overflow: visible;
 }
+
 /* =================================
    HERO BACKGROUND
 ================================= */
 
 .background-image {
   position: absolute;
+
   z-index: 0;
 
   width: 90%;
@@ -105,6 +121,7 @@ body {
   content: "PREMIUM COOKIES";
 
   position: absolute;
+
   z-index: 20;
 
   top: 8%;
@@ -114,6 +131,7 @@ body {
 
   font-size: 12px;
   font-weight: 800;
+
   letter-spacing: 6px;
 }
 
@@ -123,6 +141,7 @@ body {
 
 .cookie-title {
   position: relative;
+
   z-index: 10;
 
   display: flex;
@@ -131,7 +150,9 @@ body {
   font-family: "DM Serif Display", serif;
 
   font-size: clamp(80px, 13vw, 185px);
+
   line-height: 0.8;
+
   letter-spacing: -8px;
 
   color: #2d160d;
@@ -142,6 +163,7 @@ body {
 /* =================================
    O POSITION
 ================================= */
+
 .cookie-o {
   position: relative;
 
@@ -156,11 +178,14 @@ body {
 
   overflow: visible;
 }
+
 /* =================================
    MOVING COOKIE
 ================================= */
+
 .scroll-cookie {
-  position: fixed;
+  position: absolute;
+
   top: 0;
   left: 0;
 
@@ -170,26 +195,80 @@ body {
   object-fit: contain;
 
   z-index: 99999;
+
   pointer-events: none;
+
+  filter:
+    drop-shadow(
+      0 12px 12px rgba(0, 0, 0, 0.4)
+    );
+
+  will-change:
+    left,
+    top,
+    transform;
 }
+
+/* =================================
+   PARALLEL RING
+================================= */
+
+.cookie-parallel {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 140px;
+  height: 140px;
+
+  border-radius: 50%;
+
+  border:
+    2px solid rgba(255, 180, 80, 0.6);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 190, 100, 0.12) 0%,
+      rgba(255, 160, 70, 0.05) 45%,
+      transparent 70%
+    );
+
+  box-shadow:
+    0 0 20px rgba(255, 180, 80, 0.35),
+    0 0 45px rgba(255, 150, 50, 0.2);
+
+  pointer-events: none;
+
+  z-index: 99998;
+
+  will-change:
+    left,
+    top,
+    transform;
+}
+
 /* =================================
    HERO RIGHT CONTENT
 ================================= */
 
-.content {
+.hero-content {
   position: relative;
+
   z-index: 10;
 
   width: 32%;
 
   margin-right: 5%;
+
   padding-left: 35px;
 
   border-left:
     1px solid rgba(71, 34, 19, 0.45);
 }
 
-.content small {
+.hero-content small {
   display: block;
 
   margin-bottom: 15px;
@@ -198,15 +277,17 @@ body {
 
   font-size: 11px;
   font-weight: 800;
+
   letter-spacing: 4px;
 
   text-transform: uppercase;
 }
 
-.content h2 {
+.hero-content h2 {
   font-family: "Playfair Display", serif;
 
   font-size: clamp(38px, 4vw, 65px);
+
   line-height: 1.02;
 
   color: #2b150c;
@@ -214,16 +295,17 @@ body {
   margin-bottom: 20px;
 }
 
-.content h2::first-line {
+.hero-content h2::first-line {
   color: #2b150c;
 }
 
-.content p {
+.hero-content p {
   max-width: 420px;
 
   color: #4e2b1b;
 
   font-size: 15px;
+
   line-height: 1.8;
 
   opacity: 0.9;
@@ -237,9 +319,11 @@ body {
   position: relative;
 
   width: 100%;
+
   min-height: 70vh;
 
   display: flex;
+
   justify-content: center;
   align-items: center;
 
@@ -384,6 +468,7 @@ body {
   margin: 8px auto;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -418,49 +503,62 @@ body {
 /* =================================
    CARD 2 COOKIE TARGET
 ================================= */
+
 .card-cookie-space {
   position: relative;
+
   width: 110px;
   height: 110px;
 
   margin: 8px auto;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
   border-radius: 50%;
 
-  border: 2px dashed rgba(231, 173, 126, 0.55);
+  border:
+    2px dashed rgba(231, 173, 126, 0.55);
 
-  background: radial-gradient(
-    circle,
-    rgba(181, 103, 56, 0.22),
-    rgba(73, 32, 18, 0.15)
-  );
+  background:
+    radial-gradient(
+      circle,
+      rgba(181, 103, 56, 0.22),
+      rgba(73, 32, 18, 0.15)
+    );
 
   overflow: hidden;
 
   box-shadow:
     inset 0 0 25px rgba(255, 205, 160, 0.06);
 }
+
 /* =================================
    TARGET INNER RING
 ================================= */
+
 .cookie-target-ring {
   width: 90px;
   height: 90px;
 
   border-radius: 50%;
 
-  border: 1px solid rgba(238, 190, 151, 0.35);
+  border:
+    1px solid rgba(238, 190, 151, 0.35);
 
   position: absolute;
-  inset: 50%;
-  transform: translate(-50%, -50%);
+
+  left: 50%;
+  top: 50%;
+
+  transform:
+    translate(-50%, -50%);
 
   pointer-events: none;
 }
+
 /* =================================
    CARD INFO
 ================================= */
@@ -475,6 +573,7 @@ body {
   font-size: 29px;
 
   font-weight: 600;
+
   font-style: italic;
 
   color: #f3d4b1;
@@ -536,6 +635,7 @@ body {
   color: #f4c68f;
 
   font-size: 22px;
+
   line-height: 1;
 
   cursor: pointer;
@@ -575,6 +675,7 @@ body {
   font-size: 8px;
 
   font-weight: 800;
+
   letter-spacing: 2px;
 }
 
@@ -590,11 +691,13 @@ body {
   bottom: 35px;
   left: 50%;
 
-  transform: translateX(-50%);
+  transform:
+    translateX(-50%);
 
   color: #b8794b;
 
   font-size: 18px;
+
   letter-spacing: 10px;
 
   opacity: 0.7;
@@ -605,9 +708,9 @@ body {
 ================================= */
 
 @media (max-width: 900px) {
-
   .hero {
     height: auto;
+
     min-height: 750px;
 
     flex-direction: column;
@@ -621,9 +724,11 @@ body {
 
   .hero::before {
     top: 5%;
+
     left: 50%;
 
-    transform: translateX(-50%);
+    transform:
+      translateX(-50%);
 
     white-space: nowrap;
   }
@@ -646,7 +751,12 @@ body {
     height: 75px;
   }
 
-  .content {
+  .cookie-parallel {
+    width: 115px;
+    height: 115px;
+  }
+
+  .hero-content {
     width: 80%;
 
     margin-right: 0;
@@ -656,7 +766,7 @@ body {
     text-align: center;
   }
 
-  .content p {
+  .hero-content p {
     margin: auto;
   }
 
@@ -675,7 +785,8 @@ body {
   }
 
   .card:nth-child(2):hover {
-    transform: translateY(-12px);
+    transform:
+      translateY(-12px);
   }
 }
 
@@ -684,9 +795,9 @@ body {
 ================================= */
 
 @media (max-width: 500px) {
-
   .hero {
     min-height: 700px;
+
     padding-left: 20px;
     padding-right: 20px;
   }
@@ -694,16 +805,19 @@ body {
   .background-image {
     width: 94%;
     height: 94%;
+
     border-radius: 24px;
   }
 
   .hero::before {
     font-size: 9px;
+
     letter-spacing: 3px;
   }
 
   .cookie-title {
     font-size: 64px;
+
     letter-spacing: -3px;
   }
 
@@ -717,16 +831,22 @@ body {
     height: 70px;
   }
 
-  .content {
+  .cookie-parallel {
+    width: 105px;
+    height: 105px;
+  }
+
+  .hero-content {
     width: 88%;
   }
 
-  .content h2 {
+  .hero-content h2 {
     font-size: 38px;
   }
 
-  .content p {
+  .hero-content p {
     font-size: 13px;
+
     line-height: 1.7;
   }
 
